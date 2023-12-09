@@ -1,13 +1,33 @@
-import { formatEther, parseEther } from "viem";
+import { parseEther, formatEther } from "viem";
 import hre from "hardhat";
 
 async function main() {
+  const [bobWalletClient, aliceWalletClient] =
+    await hre.viem.getWalletClients();
 
+  const publicClient = await hre.viem.getPublicClient();
+  const bobBalance = await publicClient.getBalance({
+    address: bobWalletClient.account.address,
+  });
+
+  console.log(
+    `Balance of ${bobWalletClient.account.address}: ${formatEther(
+      bobBalance
+    )} ETH`
+  );
+
+  const hash = await bobWalletClient.sendTransaction({
+    to: aliceWalletClient.account.address,
+    value: parseEther("1"),
+  });
+  await publicClient.waitForTransactionReceipt({ hash });
+
+  const myToken = await hre.viem.deployContract("PoXme", bobWalletClient.account.address);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit())
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
