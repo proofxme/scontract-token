@@ -34,4 +34,8 @@ contract PoXme is ERC20, ERC20Burnable, ERC20Permit, ERC20Votes, Ownable {
     {
         return super.nonces(owner);
     }
+
+    function protocolURI() public pure returns (string memory) {
+        return "https://pox.me";
+    }
 }

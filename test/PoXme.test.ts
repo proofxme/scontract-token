@@ -32,4 +32,28 @@ describe("PoXme deploy", function () {
     const balance = await myToken.read.balanceOf([deployerWallet.account.address]);
     assert.equal(balance.toString(), BigInt(100 * 10 ** 18).toString());
   });
+  it("should have the proper token symbol", async function () {
+    // Load the contract instance using the fixture function
+    const { myToken } = await loadFixture(deployFixture);
+
+    // check the symbol
+    const symbol = await myToken.read.symbol();
+    assert.equal(symbol, "PoXme");
+  })
+  it("should have the proper token name", async function () {
+    // Load the contract instance using the fixture function
+    const { myToken } = await loadFixture(deployFixture);
+
+    // check the name
+    const name = await myToken.read.name();
+    assert.equal(name, "PoXme");
+  })
+  it("should have the proper protocol URI", async function () {
+    // Load the contract instance using the fixture function
+    const { myToken } = await loadFixture(deployFixture);
+
+    // check the name
+    const uri = await myToken.read.protocolURI();
+    assert.equal(uri, "https://pox.me");
+  })
 });
