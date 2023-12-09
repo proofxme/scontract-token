@@ -21,4 +21,15 @@ describe("PoXme deploy", function () {
     // Assert that the supply is as expected from the contract deployment
     assert.equal(totalSupply.toString(), BigInt(100 * 10 ** 18).toString());
   });
+  it("should have minted the maximum balance to the deployer", async function () {
+    // Load the contract instance using the fixture function
+    const { myToken } = await loadFixture(deployFixture);
+
+    // get the deployer wallet
+    const [deployerWallet] = await hre.viem.getWalletClients();
+
+    // check the balance of the deployer
+    const balance = await myToken.read.balanceOf([deployerWallet.account.address]);
+    assert.equal(balance.toString(), BigInt(100 * 10 ** 18).toString());
+  });
 });
